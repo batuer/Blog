@@ -78,20 +78,80 @@ cover_picture: /images/AndroidInterivew.jpg
    > - 抽象类：在代码中使用abstract修饰的class即为抽象类，**类对象的抽象集合。**具体的使用中主要用来进行类型隐藏，我们可以构造出一组固定的行为，这组行为却能够有任意个可能的具体实现，这个抽象描述就是**抽象类**，这一组任意个可能的具体实现则表现为泽类。这样模块可以操作一个抽象提，由于模块依赖于一个固定的抽象提，一次它可以使不允许修改的，但是允许扩展，这就是面向对象设计的一个核心原则OCP，抽象是关键所在。
    > - 接口：比abstract class更加抽象，是一种特殊的abstract class。用Interface关键字修饰，**类方法的抽象集合。**为了把程序模块进行固话契约，降低耦合。
 
-   | 参数               | 抽象类                                                       | 接口                                                 |
-   | ------------------ | ------------------------------------------------------------ | ---------------------------------------------------- |
-   |                    | 可以有默认的实现                                             | 完全抽象，不存在实现                                 |
-   | 具体实现           | 子类使用extends关键字继承抽象类，如果子类不是抽象类的话，需要实现父类中所有的抽象方法。 | 子类使用implements实现接口，需要实现所有接口中方法。 |
-   | 构造               | 可以有构造器                                                 | 不存在构造                                           |
-   | 与正常Java类的区别 | 不能被实例化外，其他一样。                                   | 完全不同的类型                                       |
-   | 访问修饰           | 抽象方法的修饰可以有pubic、protected、default                | 只用public                                           |
-   | 多继承             | 单继承                                                       | 多实现                                               |
-   | 速度               | 速度比接口快                                                 | 稍慢，需要时间找具体的实现                           |
-   | 增加新方法         | 增加新方法，可以提供默认的实现，不用修改子类                 | 增加新方法，实现类必须实现新增加方法                 |
-   | 抽象层次           | 类对象的抽象                                                 | 类方法的抽象                                         |
-   | 与实现类关系       | is a（继承关系）                                             | like a（契约关系）                                   |
+   ![Markdown](http://i2.bvimg.com/635133/f502ff864834f9d1.png)
 
 
+#### 集合类
+
+1. JAVA常用集合类功能、区别和性能
+
+   - Java的集合类主要由两个接口派生而出：Collection和Map,Collection和Map是Java集合框架的根接口。
+
+     ![](http://upload-images.jianshu.io/upload_images/3985563-e7febf364d8d8235.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+     ​
+
+     图中，ArrayList,HashSet,LinkedList,TreeSet是我们经常会有用到的已实现的集合类。
+
+     1. Collection: 最基本的集合类型，实现**Iterable**接口。
+        1. List: **有序，可重复**。
+           1. LinkedList: 双向链表实现，可被用作堆栈、队列、双向队列，set和get函数以O(n/2)的性能获取一个节点。
+           2. ArrayList: 数组实现，自动扩容。
+           3. Vector: 数组实现，自动扩容，同步存取。
+           4. Stack: 继承Vector,实现后进先出堆栈，提供5个额外方法使得Vector当堆栈使用。
+        2. Set: **不可重复**。
+           1. HashSet: 代用对象hashCode，计算存放位置,通过hashCode 和equals判断重复。(HashMap的Key的判断,无序)
+           2. TreeSet: 排序。
+
+   - Map实现类用于保存具有映射关系的数据。Map保存的每项数据都是key-value对，也就是由key和value两个值组成。Map里的key是不可重复的，key用户标识集合里的每项数据。
+
+     ![](http://upload-images.jianshu.io/upload_images/3985563-06052107849a7603.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+     图中，HashMap和TreeMap经常用到。
+
+     1. Map: Key和Value 的映射，不包含相同的Key。
+        1. HashTable: 同步，存取非空对象。
+        2. HashMap: 不同步，允许空对象，不保证有序，存储Entrty。
+        3. Treemap: 类似HashMap，实现排序。
+        4. LinkedHashMap: Hash表和链表的实现，类似HashMap，保证双向链表节点的顺序。
+        5. WeakHashMap: key弱应用。
+        6. ArrayMap: 没用Entrty，由两数组维护。速度慢于HashMap，有排序，二分法查找，数组收缩功能，时间换空间。
+
+2. 并发相关的集合类 
+
+3. 部分常用集合类的内部实现方式
+
+#### 多线程相关
+
+1. Thread、Runnable、Callable、Futrue类关系与区别
+2. JDK中默认提供了哪些线程池，有何区别
+3. 线程同步有几种方式，分别阐述在项目中的用法
+4. 在理解默认线程池的前提下，自己实现线程池
+
+#### 字符
+
+1. String的不可变性
+2. StringBuilder和StringBuffer的区别
+3. 字符集的理解：Unicode、UTF-8、GB2312等 
+4. 正则表达式相关问题
+
+#### 注解
+
+1. 注解的使用 
+2. 注解的级别及意义  
+3. 如何自定义注解
 
 
+## 二、Android技术
 
+#### Android基础
+
+1. 四大组件的意义及使用，生命周期回调及意义
+2. AsyncTask、Handler的使用
+3. Android系统层次框架结构
+4. AsyncTask的实现方式
+5. AsyncTask使用的时候应该注意什么
+6. Android常见的存储方式
+7. Looper、Handler和MessageQueue的关系  
+8. Activity的启动流程（考察对Framwork的熟悉程度）
+9. 多进程开发的注意事项(Application类区分进程，进程间内存不可见、进程间通讯方式)
