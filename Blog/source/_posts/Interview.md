@@ -171,7 +171,7 @@ cover_picture: /images/AndroidInterivew.jpg
 
 2. JDK中默认提供了哪些线程池，有何区别
 
-    https://batuer.github.io/2018/03/15/Executor/
+    > https://batuer.github.io/2018/03/15/Executor/
 
 3. 线程同步有几种方式，分别阐述在项目中的用法
 
@@ -287,7 +287,11 @@ cover_picture: /images/AndroidInterivew.jpg
 
 8. Activity的启动流程（考察对Framwork的熟悉程度）
 
+   > http://gusi123.cn/2018/03/27/Activity启动流程/
+
 9. 多进程开发的注意事项(Application类区分进程，进程间内存不可见、进程间通讯方式)
+
+   > http://gusi123.cn/2018/03/26/MultiProcess/
 
 #### Resource相关
 
