@@ -192,4 +192,20 @@ ActivityThread实例调用attach(false)，创建Application
      }
      ```
 
-     ​
+
+### Instrumentation ?
+
+- Instrumentation会在应用程序的任何代码运行之前被实例化，它能够允许你监视应用程序和系统的所有交互。
+
+- 收集AndroidManifest.xml标签信息
+
+- Apllication的创建，Activity的创建，以及生命周期都会经过这个对象去执行。简单点说，就是把这些操作包装了一层。通过操作Instrumentation进而实现上述的功能。
+
+- ```java
+  public void callApplicationOnCreate(Application app) {
+          app.onCreate();
+      }
+  ```
+
+  ​
+
