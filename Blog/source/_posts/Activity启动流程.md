@@ -207,5 +207,40 @@ ActivityThread实例调用attach(false)，创建Application
       }
   ```
 
-  ​
+  ### LoadedApk就是data.info
+
+  ```java
+  public Application makeApplication(boolean forceDefaultAppClass,
+      Instrumentation instrumentation) {
+      ...
+      String appClass = mApplicationInfo.className;
+      //Application的类名。明显是要用反射了。
+      ...
+      ContextImpl appContext = ContextImpl.createAppContext(mActivityThread
+          , this);
+      //留意下Context
+      app = mActivityThread.mInstrumentation
+          .newApplication( cl, appClass, appContext);
+      //通过仪表创建Application
+      ...
+  }
+  ```
+
+  - 在取得Application的实际类名之后，最终的创建工作还是交由Instrumentation去完成，就像前面所说的一样。
+
+    #### 回Instrumentation
+
+    ```java
+    static public Application newApplication(Class<?> clazz, Context context)
+                throws InstantiationException, IllegalAccessException, 
+                ClassNotFoundException {
+            Application app = (Application)clazz.newInstance();
+            app.attach(context);
+            return app;
+        }
+    ```
+
+    ### LaunchActivity
+
+    ​
 
