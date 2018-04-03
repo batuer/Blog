@@ -242,5 +242,96 @@ ActivityThread实例调用attach(false)，创建Application
 
     ### LaunchActivity
 
-    ​
+    当Application初始化完成后，系统会根据Manifests中的配置启动Activity发送一个Intent去启动相对应的Activity。
 
+    ```java
+     // we use token to identify this activity without having to send the
+    // activity itself back to the activity manager. (matters more with ipc)
+    @Override
+    public final void scheduleLaunchActivity(Intent intent, IBinder token, int ident,
+                    ActivityInfo info, Configuration curConfig, Configuration overrideConfig,
+                    CompatibilityInfo compatInfo, String referrer, IVoiceInteractor voiceInteractor,
+                    int procState, Bundle state, PersistableBundle persistentState,
+                    List<ResultInfo> pendingResults, List<ReferrerIntent> pendingNewIntents,
+                    boolean notResumed, boolean isForward, ProfilerInfo profilerInfo) {
+
+                updateProcessState(procState, false);
+
+                ActivityClientRecord r = new ActivityClientRecord();
+
+                r.token = token;
+                r.ident = ident;
+                r.intent = intent;
+                r.referrer = referrer;
+                r.voiceInteractor = voiceInteractor;
+                r.activityInfo = info;
+                r.compatInfo = compatInfo;
+                r.state = state;
+                r.persistentState = persistentState;
+
+                r.pendingResults = pendingResults;
+                r.pendingIntents = pendingNewIntents;
+
+                r.startsNotResumed = notResumed;
+                r.isForward = isForward;
+
+                r.profilerInfo = profilerInfo;
+
+                r.overrideConfig = overrideConfig;
+                updatePendingConfiguration(curConfig);
+    			//启动Activity
+                sendMessage(H.LAUNCH_ACTIVITY, r);
+            }
+    ```
+
+    - H 接收到LAUNCH_ACTIVITY的消息，开始初始化Activity，ActivityThread.handleLaunchActivity()
+
+      ```java
+      private void handleLaunchActivity(ActivityClientRecord r, Intent customIntent, String reason) {
+        // gc、Profiler、Config、WindowManagerGlobal
+        //...
+        Activity a = performLaunchActivity(r,customIntent);
+          if (a != null) {
+          //Config...
+          //onResume
+          handleResumeActivity(r.token, false, r.isForward,
+                          !r.activity.mFinished &&       		  !r.startsNotResumed, r.lastProcessedSeq, reason);
+          }
+      ```
+
+    - performLaunchActivity()
+
+      ```java
+      private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) {
+        //Instrumentation 创建Activity
+         Activity activity = null;
+         try {
+             java.lang.ClassLoader cl = 		r.packageInfo.getClassLoader();
+            //反射创建Activity实例
+           	activity = mInstrumentation.newActivity(
+              cl, component.getClassName(), r.intent);
+              } catch (Exception e) {
+              }
+        		//获取Application，r.packageInfo就是LoadApk
+              try {
+                  Application app = r.packageInfo.makeApplication(false, mInstrumentation);
+         if (activity != null) {
+          //...           
+         activity.attach( appContext, this,               			getInstrumentation(), r.token,
+            	r.ident, app, r.intent, r.activityInfo, title,      	 r.parent,r.embeddedID, 			  			    		r.lastNonConfigurationInstances, config,
+              r.referrer, r.voiceInteractor,window);
+      		//持久化 Instrumentation执行Activity的onCreate()
+             //Mainfiset下Activity标签
+             // ersistableMode == persistAcrossReboots
+         		if (r.isPersistable()) {                 				  mInstrumentation.callActivityOnCreate(
+                  activity,r.state, r.persistentState);
+              } else {                 			    		 			mInstrumentation.callActivityOnCreate(
+                  activity, r.state);
+               }
+               //...
+              return activity;
+          }
+      ```
+
+
+#### Application 创建完成，第一个Activity创建完成。

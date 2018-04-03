@@ -296,10 +296,33 @@ cover_picture: /images/AndroidInterivew.jpg
 #### Resource相关
 
 1. .9图片的意义
+
 2. style和theme的作用及用法
-3. dpi、sppx的区别以及转换关系
+
+3. dpi、sp、px的区别以及转换关系
+
+   - px是像素，屏幕上实际的像素点单位。
+   - dip/dp设备独立像素，布局常使用，与屏幕有关，在不同**像素密度**的设备上会自动适配。
+   - sp放大像素，处理字体大小。
+   - dpi 像素密度，每平方英寸中的像素数。
+   - px和dp转换：px=1dp * 像素密度(dpi) / 160 =dp * density
+
 4. raw和assets文件夹的作用，二者有何区别
+
+   - 两者目录下的文件在打包后会原封不动的保存在apk包中,不会被编译成二进制。
+   - res/raw中的文件会被映射到R.java文件中,访问的时候直接使用资源ID即R.id.filename; 而assets文件夹下的文件不会被映射到R.java中,访问的时候需要AssetManager类。
+   - res/raw不可以有目录结构,而assets则可以有目录结构,也就是assets目录下可以再建立文件夹。
+   - 读取res/raw下的文件资源,通过以下方式获取输入流来进行写操作InputStreamis=getResources().openRawResource(R.id.filename); 
+     //通过 资源 id 直接打开 raw 下的 流文件
+   - 读取assets下的文件资源,通过以下方式获取输入流来进行写操作，InputStream is = getAssets().open("filename"); 
+
 5. Android系统如何在多个资源文件夹下查找匹配最合适的资源
+
+   []: https://www.jianshu.com/p/fd07300b031a
+
+   ![Android资源匹配顺序](https://upload-images.jianshu.io/upload_images/2088926-c222faae63ebcb0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+   对于资源文件夹的命名必须按照上表中的顺序依次配置，切不可倒置。
 
 #### 虚拟机
 
