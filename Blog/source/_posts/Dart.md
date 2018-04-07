@@ -7,6 +7,8 @@ tags:
 cover_picture: /images/dart.png
 ---
 
+### Dart基础学习。
+
 List
 
 - 固定长度的列表，一旦定义无法改变。
