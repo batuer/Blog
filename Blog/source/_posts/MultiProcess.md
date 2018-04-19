@@ -5,7 +5,7 @@ tags:
 
 	 - Android
 	 - 多进程
-cover_picture: /images/common.jpg
+cover_picture: /images/common.png
 ---
 
 ### 多进程概念

@@ -5,7 +5,7 @@ tags:
 
 	 - Android
 	 - AsyncTask
-cover_picture: /images/common.jpg
+cover_picture: /images/common.png
 ---
 
 ### AsyncTask

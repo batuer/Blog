@@ -318,7 +318,7 @@ cover_picture: /images/AndroidInterivew.jpg
 
 5. Android系统如何在多个资源文件夹下查找匹配最合适的资源
 
-   []: https://www.jianshu.com/p/fd07300b031a
+   > https://www.jianshu.com/p/fd07300b031a
 
    ![Android资源匹配顺序](https://upload-images.jianshu.io/upload_images/2088926-c222faae63ebcb0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
