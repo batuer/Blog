@@ -12,5 +12,10 @@ cover_picture: /images/common.png
 
 
 
-### Binder
+### Binder理解：
+
+- Binder是一种Android中跨进程通信(IPC)方式。
+- Binder是
+
+
 

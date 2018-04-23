@@ -38,6 +38,14 @@ cover_picture: /images/OptimizingPerformance.jpg
     - 可以使用硬件加速，提高流畅度。
 - 工具
   - System Trace（收集和检测时间信息，CPU的消耗）
+
   - Hierarchy Viewer（布局层级、绘制）
+
   - TraceView（定位代码的执行时间）
-  - AndroidStudio 自带的 Profile
+
+  - AndroidStudio3.0 自带的 [Profiler](https://developer.android.google.cn/studio/releases/index.html#3-0-0)
+  
+#### 内存优化
+
+- ​
+
