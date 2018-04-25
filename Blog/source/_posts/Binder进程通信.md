@@ -118,6 +118,36 @@ Binder跨进程通信机制基于Client -Server 模式
   1. Binder实体是Server进程在Binder驱动中的存在形式。
   2. Binder实体保存Server和ServiceManager的信息(保存在内核空间中)。
   3. Binder驱动通过内核空间的Binder实体找到用户空间的Server对象。
+- 注册服务后，Binder驱动持有Server进程创建的BInder实体。
 
+
+##### 获取服务
+
+- Client进程使用某个service前，须通过Binder驱动向ServiceManager进程获取相应的Service信息。
+
+![](https://upload-images.jianshu.io/upload_images/2088926-62925df9974d278b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+##### 使用服务
+
+Client 进程获取到的Service信息(Binder代理对象)，通过Binder驱动建立与该Server所在Server进程通信的链路，并开始使用服务。
+
+![](https://upload-images.jianshu.io/upload_images/2088926-017b7a26b17765c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![](https://upload-images.jianshu.io/upload_images/2088926-416ecacccf3623b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+#### 优点
+
+Linux上的其他进程通信方式(管道、消息队列、共享内存、信号量、Socker)，Binder机制的优点：
+
+- 高效
+  - Binder机制拷贝只需一次，而管道、消息队列、Socket都需两次。
+  - 通过驱动在内核空间拷贝数据，不需要额外的同步处理。
+- 安全性高
+  - Binder机制为每个进程分配了UUID/PID来作为鉴别身份的表示。
+  - 在Binder通信时会根据UUID/PID进行有效性检测。
+  - 传统的进程通信方式对于通信双方的身份没有做出严格的验证。
+- 使用简单
+  - 采用Client/Server架构
+  - 实现面向对象的调用方式(即在使用BInder时，就和调用一个本地对象实例一样)
 
 [^1]: 通过文件共享、Socket、Messenger（AIDL一种）、ContentProvider、AIDL。
