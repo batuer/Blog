@@ -8,7 +8,7 @@ tags:
 cover_picture: /images/Android事件传递.png
 ---
 
-![](https://upload-images.jianshu.io/upload_images/2088926-4303b925c1b36f80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/2088926-ac2596ed73815e52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 - 事件一般有
 
