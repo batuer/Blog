@@ -62,3 +62,11 @@ cover_picture: /images/common.png
   }
 ```
 
+##### View位置(坐标)
+
+![](https://upload-images.jianshu.io/upload_images/2088926-35c44aad5ee72007.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+#### View  Measure
+
+
+
