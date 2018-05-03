@@ -8,7 +8,7 @@ tags:
 cover_picture: /images/common.png
 ---
 
-[链接](https://www.jianshu.com/p/4ee3fd07da14 )
+[学习链接](https://www.jianshu.com/p/4ee3fd07da14 )
 
 #### Binder
 
