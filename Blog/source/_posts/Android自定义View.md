@@ -557,6 +557,7 @@ cover_picture: /images/common.png
              } else {
                  // 若 mScrollX 和 mScrollY 有值，则对 canvas 的坐标进行偏移
                  canvas.translate(scrollX, scrollY);
+     ```
 
 
                  // 调用 Drawable 的 draw 方法绘制背景
@@ -565,7 +566,7 @@ cover_picture: /images/common.png
              }
         }
      ```
-
+    
      ​
 
   3. onDraw()
