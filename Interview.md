@@ -20,6 +20,8 @@
 
 4. service保活
 
+   > http://gusi123.cn/2018/06/26/Android%E8%BF%9B%E7%A8%8B%E3%80%81Service%E4%BF%9D%E6%B4%BB/
+
 5. 锁的使用
 
 6. 线程
