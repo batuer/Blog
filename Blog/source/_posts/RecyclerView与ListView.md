@@ -73,3 +73,57 @@ cover_picture: /images/common.png
 
 > https://segmentfault.com/a/1190000007331249
 
+#### 缓存原理相似
+
+1. 回收离屏的ItemView至缓存。
+2. 入屏的ItemView优先从缓存中获取。
+3. 两者实现细节有差异。
+
+#### 缓存层级不同
+
+##### RecyclerView
+
+1. mAttachedScrap
+   - 快速重用屏幕上可见的列表项ItemView，不需要createView()和bindView()。
+2. mCacheViews（优势）
+   - 缓存离开屏幕的 ItemView，复用。
+   - 默认上限2，即缓存屏幕外2个ItemView。
+   - ItemView被复用时，无需bindView快速复用。
+   - Adapter被更换时被清空，生命周期关联于Adapter。
+3. mViewCacheExtension
+   - 默认不实现，扩展。
+4. mRecyclerPool
+   - 缓存离开屏幕的 ItemView，复用。
+   - 默认上限5。
+
+##### ListView
+
+1. mActiveViews
+   - 快速重用屏幕上可见的列表项ItemView，不需要createView()和bindView()。
+2. mScrapViews
+   - 缓存离开屏幕的ItemView，复用。
+   - Adapter被更换时，被清空，生命周期关联于Adapter。
+
+#### 缓存不同
+
+1. RecyclerView缓存RecyclerView.ViewHolder，ItemView + ViewHolder。
+
+2. ListView获取缓存
+
+   ![](https://upload-images.jianshu.io/upload_images/2088926-a16a93ebbeed4bee.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+3. RecyclerView获取缓存
+
+   ![](https://upload-images.jianshu.io/upload_images/2088926-9137cae6bbb5658f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+4. 局部刷新
+
+   1. RecyclerView 提供局部刷新，ListVIew没有。
+   2. RecyclerView局部刷新时，会预先通过对pso和flag的预处理，尽可能的减少bindVIew()。
+
+### 结论
+
+- 性能上，RecyclerView并没有显著的提升。
+
+- 有频繁更新、ItemView动画、局部刷新这些需求时，RecyclerView优势大于ListView。
+- RecyclerView扩展性强（LayoutManager：ItemView布局，ViewCacheExtension：ItemView缓存复用 ）。
