@@ -41,7 +41,7 @@ cover_picture: /images/GitCommand.png
 6. 远程提交：git push origin master
 7. 查看本地分支：git branch 
 8. 查看远程分支 ：git  branch  -a 
-9. 拉取远程分支并在本地创建：git  checkout  -b  xxx  origin/xxx
+9. 拉取远程分支并在本地创建：git  checkout  -b  xxx  origin  origin/xxx
 10. 切换本地分支：git  checkout  xxx 
 11. 查看本地Log：git log
 12. 查看远程Log：git log origin/master
@@ -54,28 +54,16 @@ cover_picture: /images/GitCommand.png
 15. 回退：
     1. git checkout HEAD^：回退前一个
     2. git checkout HEAD~n：回退n个 提交
-16. 撤销 git revert 和 git reset的区别  
-    1. git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。
-    2. git reset 是撤销某次提交，但是此次之后的修改都会被退回到暂存区 。HEAD向后移动了一下.
-    3. git revert 是撤销某次提交，但是此次之后的修改都会被退回到暂存区 。HEAD继续前进，只是新的commit的内容和要revert的内容正好相反，能够抵消要被revert的内容。  
-    4. 在回滚这一操作上看，效果差不多。但是在日后继续merge以前的老版本时有区别。因为git revert是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是git reset是之间把某些commit在某个branch上删除，因而和老的branch再次merge时，这些被回滚的commit应该还会被引入。 
+16. 撤销
+    1. git reset ：本地撤销。
+    2. git revert：提交一个新的版本，将需要revert的版本的内容再反向修改回去 
+    3. git revert 和 git reset的区别 
+       1. git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。
+       2. 在回滚这一操作上看，效果差不多。但是在日后继续merge以前的老版本时有区别。因为git revert是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是git reset是之间把某些commit在某个branch上删除，因而和老的branch再次merge时，这些被回滚的commit应该还会被引入。 
+       3. git reset 是把HEAD向后移动了一下，而git revert是HEAD继续前进，只是新的commit的内容和要revert的内容正好相反，能够抵消要被revert的内容。 
 17. Log
     1. git log：HEAD及以前
-    2. git log filename：filename的log
-    3. git log v1 -- v2：v1分支 ，v2文件
-    4. git reflog：所有Log
-18. 移植提交记录：git cherry-pick  startlog   endlog
-19. tag
-    1. 创建tag：git tag tagname
-    2. 查看本地tag：git tag
-    3. 查看远程tag：git ls-remote --tags origin 
-    4. 删除本地tag：git tag -d tagname
-    5. 删除远程tag：git push origin :tagName
-    6. 切换tag：git checkout -b tagName 
-20. 远程跟踪 (pull ,push)
-    1. git branch -u origin/master xx
-    2. git checkout -b xxx   origin/master
-21. push：git push origin source:destination
+    2. git reflog：所有Log
 
 
 
