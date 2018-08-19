@@ -7,7 +7,7 @@ tags:
 	 - Java注解
 cover_picture: /images/JavaAnnotaion.jpg
 ---
-### 一、元数据
+### 元数据
 
 > https://gitee.com/pianzhi110/Fragmentation/tree/master/app/src/main/java/com/gusi/fragmentation/annotation
 
@@ -29,7 +29,7 @@ cover_picture: /images/JavaAnnotaion.jpg
 
 注解Annotation就是java平台的元数据，是 J2SE5.0新增加的功能，该机制允许在Java 代码中添加自定义注释，并允许通过反射（reflection），以编程方式访问元数据注释。通过提供为程序元素（类、方法等）附加额外数据的标准方法，元数据功能具有简化和改进许多应用程序开发领域的潜在能力，其中包括配置管理、框架实现和代码生成。
 
-### 二、注解（Annotation）
+### 注解（Annotation）
 
 ##### 1.注解（Annotation）的概念
 
@@ -86,7 +86,7 @@ JDK除了在java.lang提供了上述内建注解外，还在java.lang。annotati
 `@Target`：表示该注解类型的所适用的程序元素类型。当注解类型声明中没有`@Target`元注解，则默认为可适用所有的程序元素。如果存在指定的`@Target`元注解，则编译器强制实施相应的使用限制。关于程序元素\(ElementType\)是枚举类型，共定义8种程序元素，如下表：  
 ![](http://upload-images.jianshu.io/upload_images/3985563-7b457df2143fa5dd.png?imageMogr2/auto-orient/strip|imageView2/2/w/1240)
 
-### 三、自定义注解（Annotation）
+### 自定义注解（Annotation）
 
 创建自定义注解，与创建接口有几分相似，但注解需要以@开头。
 
@@ -97,8 +97,171 @@ JDK除了在java.lang提供了上述内建注解外，还在java.lang。annotati
 
 **当然注解中也可以不存在成员变量，在使用解析注解进行操作时，仅以是否包含该注解来进行操作。当注解中有成员变量时，若没有默认值，需要在使用注解时，指定成员变量的值。**
 
-### 四、注解解析
+### 注解解析
 
 接下来，通过反射技术来解析自定义注解。关于反射类位于包java.lang.reflect，其中有一个接口AnnotatedElement，该接口主要有如下几个实现类：Class，Constructor，Field，Method，Package。除此之外，该接口定义了注释相关的几个核心方法，如下：  
 ![](http://upload-images.jianshu.io/upload_images/3985563-4077bbaef5b27a4b.png?imageMogr2/auto-orient/strip|imageView2/2/w/1240)  
 因此，当获取了某个类的Class对象，然后获取其Field,Method等对象，通过上述4个方法提取其中的注解，然后获得注解的详细信息。
+
+### 注解的应用
+
+#### 运行时注解
+
+Java反射获取变量或调用方法。
+
+> ```java
+>  //view控件
+>   public static void initViews(Object object, View sourceView) {
+>     //获取该类声明的成员变量
+>     Field[] fields = object.getClass().getDeclaredFields();
+>     for (Field field : fields) {
+>       //获取该成员变量上使用的ViewInject注解
+>       ViewInject viewInject = field.getAnnotation(ViewInject.class);
+>       if (viewInject != null) {
+>         int viewId = viewInject.id();//获取id参数值
+>         boolean clickable = viewInject.clickable();//获取clickable参数值
+>         if (viewId != -1) {
+>           try {
+>             field.setAccessible(true);
+>             //赋值
+>             field.set(object, sourceView.findViewById(viewId));
+>             if (clickable == true) {
+>               //click
+>               sourceView.findViewById(viewId).setOnClickListener((View.OnClickListener) (object));
+>             }
+>           } catch (Exception e) {
+>           }
+>         }
+>       }
+>     }
+>   }
+> ```
+>
+> ```java
+> //布局资源
+> public static void initLayout(Activity activity) {
+>   Class<? extends Activity> activityClass = activity.getClass();
+>   ContentView contentView = activityClass.getAnnotation(ContentView.class);
+>   if (contentView != null) {
+>     int layoutId = contentView.value();
+>     try {
+>       //反射执行setContentView（）方法
+>       Method method = activityClass.getMethod("setContentView", int.class);
+>       method.invoke(activity, layoutId);
+>     } catch (Exception e) {
+>       e.printStackTrace();
+>     }
+>   }
+> }
+> ```
+
+#### 编译时期注解(APT)
+
+- Annotation Processing Tool 是一种处理在注视的工具，对源代码文件编译时期找出其中的Annotation，进行额外的处理（编译时期生成文件）。
+
+- 组成要素
+
+  1. 注解处理器(AbstractProcess)
+
+     > ```java
+     > public class BindViewProcessor extends AbstractProcessor {}
+     > ```
+
+  2. 代码处理(JavaPoet)
+
+     > ```java
+     > /**
+     >  * scan
+     >  * process annotation
+     >  * mk file
+     >  *
+     >  * @param set
+     >  * @param roundEnvironment
+     >  * @return
+     >  */
+     > @Override
+     > public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+     >     mMessager.printMessage(Diagnostic.Kind.NOTE, "processing..");
+     >     mProxyMap.clear();
+     >     //get all BindView annotation
+     >     Set<? extends Element> viewElements = roundEnvironment.getElementsAnnotatedWith(BindView.class);
+     >     for (Element element : viewElements) {
+     >         VariableElement variableElement = (VariableElement) element;
+     >         TypeElement classElement = (TypeElement) variableElement.getEnclosingElement();
+     >         String fullClassName = classElement.getQualifiedName().toString();
+     >         ClassCreatorProxy proxy = mProxyMap.get(fullClassName);
+     >         if (proxy == null) {
+     >             proxy = new ClassCreatorProxy(mElementUtils, classElement);
+     >             mProxyMap.put(fullClassName, proxy);
+     >         }
+     >         BindView bindAnnotation = variableElement.getAnnotation(BindView.class);
+     >         int id = bindAnnotation.value();
+     >         proxy.putElement(id, variableElement);
+     >     }
+     >     
+     >     //通过遍历mProxyMap，创建java文件
+     >     //通过StringBuilder生成
+     >     /*for (String key : mProxyMap.keySet()) {
+     >         ClassCreatorProxy proxyInfo = mProxyMap.get(key);
+     >         try {
+     >             JavaFileObject jfo = processingEnv.getFiler().createSourceFile(proxyInfo.getProxyClassFullName(), proxyInfo.getTypeElement());
+     >             Writer writer = jfo.openWriter();
+     >             writer.write(proxyInfo.generateJavaCode());
+     >             writer.flush();
+     >             writer.close();
+     >             mMessager.printMessage(Diagnostic.Kind.NOTE, " --> create " + proxyInfo.getProxyClassFullName() + "success");
+     >         } catch (IOException e) {
+     >             mMessager.printMessage(Diagnostic.Kind.NOTE, " --> create " + proxyInfo.getProxyClassFullName() + "error");
+     >         }
+     >     }*/
+     >     //通过javapoet生成
+     >     for (String key : mProxyMap.keySet()) {
+     >         ClassCreatorProxy proxyInfo = mProxyMap.get(key);
+     >         JavaFile javaFile = JavaFile.builder(proxyInfo.getPackageName(), proxyInfo.generateJavaCode2()).build();
+     >         try {
+     >             //生成文件
+     >             javaFile.writeTo(processingEnv.getFiler());
+     >         } catch (IOException e) {
+     >             e.printStackTrace();
+     >         }
+     >     }
+     >     mMessager.printMessage(Diagnostic.Kind.NOTE, "process finish ...");
+     >     return false;
+     > }
+     > ```
+
+  3. 处理器注册(AutoService + apt)
+
+     > ```java
+     > //自动生成
+     > implementation 'com.google.auto.service:auto-service:1.0-rc2'
+     > 
+     > @AutoService(Processor.class)
+     > public class BindViewProcessor extends AbstractProcessor {}
+     > 
+     > ```
+
+- 流程
+
+  - 自定义注解(apt-annotation)
+
+  - 自定义注解处理器(apt-processor)
+
+  - 处理器里面完成处理，生成文件(apt-library)
+
+  - 反射调用
+
+    > ```java
+    > public static void bind(Activity activity) {
+    >     Class clazz = activity.getClass();
+    >     try {
+    >         Class bindViewClass = Class.forName(clazz.getName() + "_ViewBinding");
+    >         Method method = bindViewClass.getMethod("bind", activity.getClass());
+    >         method.invoke(bindViewClass.newInstance(), activity);
+    >     } catch (Exception e) {
+    >     }
+    > }
+    > ```
+
+    
+
