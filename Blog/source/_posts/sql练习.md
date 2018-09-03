@@ -374,29 +374,102 @@
 
 6. 查询在 SC 表存在成绩的学生信息。
 
+    
+
+   ```sql
+   SELECT st.* From student st WHERE EXISTS (SELECT sc.SId From sc WHERE sc.SId = st.SId);
    
+   SELECT st.* FROM student st WHERE st.SId in (SELECT sc.sid From sc);
+   
+   select DISTINCT student.* from student,sc where student.SId=sc.SId;
+   ```
 
 7. 查询所有同学的学生编号、学生姓名、选课总数、所有课程的总成绩(没成绩的显示为 null )。
 
+   ```sql
+   SELECT st.sid,st.Sname,count(sc.sid),sum(sc.score) From student st JOIN sc On sc.SId = st.SId GROUP BY st.SId;
+   
+   SELECT st.sid,st.Sname,count(sc.sid),sum(sc.score) From student st Left JOIN sc On sc.SId = st.SId GROUP BY st.SId;
+   
+   select student.sid, student.sname,r.coursenumber,r.scoresum from student,(select sc.sid, sum(sc.score) as scoresum, count(sc.cid) as coursenumber from sc group by sc.sid)r where student.sid = r.sid;
+   
+   select s.sid, s.sname,r.coursenumber,r.scoresum from ((select student.sid,student.sname from student)s left join (select sc.sid, sum(sc.score) as scoresum, count(sc.cid) as coursenumber from sc group by sc.sid)r on s.sid = r.sid);
+   
+   ```
+
 8. 查有成绩的学生信息。
+
+   ```sql
+   SELECT st.* From student st WHERE EXISTS (SELECT sc.SId From sc WHERE sc.SId = st.SId);
+   
+   SELECT st.* From student st WHERE st.SId in (SELECT sc.sid From sc);
+   ```
 
 9. 查询「李」姓老师的数量。
 
+   ```sql
+   SELECT COUNT(TId) FROM teacher WHERE Tname like '李%';
+   
+   SELECT COUNT(*) FROM teacher WHERE Tname like '李%';//自动最优
+   ```
+
 10. 查询学过「张三」老师授课的同学的信息。
+
+   ```sql
+   SELECT st.* From student st JOIN sc On sc.SId = st.SId JOIN course On course.CId = sc.CId JOIN teacher On teacher.TId = course.TId WHERE teacher.Tname = '张三'; 
+   
+   select student.* from student,teacher,course,sc where student.sid = sc.sid and course.cid=sc.cid and course.tid = teacher.tid and tname = '张三';
+   ```
 
 11. 查询没有学全所有课程的同学的信息。
 
+    ```sql
+    select * from student where student.sid not in (select sc.sid from sc group by sc.sid having count(sc.cid)= (select count(cid) from course));
+    
+    SELECT st.* From student st Left Join sc On sc.SId = st.SId GROUP BY st.SId HAVING count(sc.SId) < (SELECT COUNT(cid) FROM course);
+    ```
+
 12. 查询至少有一门课与学号为" 01 "的同学所学相同的同学的信息。
+
+    ```sql
+    select * from student where student.sid in (select sc.sid from sc where sc.cid in(select sc.cid from sc where sc.sid = '01'));
+    
+    SELECT DISTINCT st.* From sc JOIN student st On st.SId = sc.SId Join course On course.CId = sc.CId WHERE course.CId in 
+    (SELECt course.cid From sc JOIN student st On st.SId = sc.SId JOIN course On course.CId = sc.CId WHERE st.SId = '01') And st.SId != '01' ;
+    ```
 
 13. 查询和" 01 "号的同学学习的课程   完全相同的其他同学的信息。
 
+    ```sql
+    SELECT st.* From sc JOIN course On course.CId = sc.CId JOIN student st On st.SId = sc.SId GROUP BY st.sid HAVING count(course.cid) = 
+    (SELECT count(course.cid) From sc JOIN course On course.CId = sc.CId WHERE sc.SId = '01');
+    ```
+
 14. 查询没学过"张三"老师讲授的任一门课程的学生姓名。
+
+    ```sql
+    SELECT st.* From student st,teacher,course,sc WHERE st.SId = sc.SId And course.CId = sc.CId And course.TId = teacher.TId And teacher.Tname = '张三';//多表联合查询
+    
+    select * from student where student.sid not in(select sc.sid from sc,course,teacher where sc.cid = course.cid and course.tid = teacher.tid and teacher.tname= "张三");
+    ```
 
 15. 查询两门及其以上不及格课程的同学的学号，姓名及其平均成绩。
 
+    ```sql
+    SELECT st.SId,st.sname,avg(sc.score) From sc JOIN student st On sc.SId = st.SId WHERE sc.score < 60 GROUP BY sc.SId HAVING COUNT(sc.SId) >= 2;
+    ```
+
 16. 检索" 01 "课程分数小于 60，按分数降序排列的学生信息。
 
+    ```sql
+    SELECT student.* From sc,student WHERE sc.SId = student.SId  And sc.CId = '01' And sc.score < 60 ORDER BY sc.score DESC;
+    ```
+
 17. 按平均成绩从高到低显示所有学生的所有课程的成绩以及平均成绩。
+
+    ```sql
+    SELECT * From sc LEFT JOIN (SELECT sid,avg(score) as avgScore From sc GROUP BY sid)r On r.sid = sc.SId ORDER BY r.avgScore Desc; 
+    ```
 
 18. 查询各科成绩最高分、最低分和平均分：以如下形式显示：
 
@@ -405,6 +478,16 @@
     及格为>=60，中等为：70-80，优良为：80-90，优秀为：>=90
 
     要求输出课程号和选修人数，查询结果按人数降序排列，若人数相同，按课程号升序排列
+
+    ```sql
+    SELECT sc.cid,course.cname,MAX(sc.score) as 最高分,min(sc.score) as 最低分,avg(sc.score) as 平均分,count(sc.SId) as 选修人数,
+    sum(case when sc.score>=60 then 1 else 0 end )/count(*)as 及格率,
+    sum(case when sc.score>=70 and sc.score<80 then 1 else 0 end )/count(*)as 中等率,
+    sum(case when sc.score>=80 and sc.score<90 then 1 else 0 end )/count(*)as 优良率,
+    sum(case when sc.score>=90 then 1 else 0 end )/count(*)as 优秀率,
+    sum(case when sc.score = 100 THEN 1 else 0 end)/count(*) as 满分率
+    From sc,course WHERE course.CId = sc.CId GROUP BY sc.CId ORDER BY count(*)DESC, sc.CId ASC;
+    ```
 
 19. 按各科成绩进行排序，并显示排名， Score 重复时保留名次空缺。
 
