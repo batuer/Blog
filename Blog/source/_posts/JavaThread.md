@@ -9,7 +9,7 @@ tags:
 	 - Semaphore
 	 - CountDownLatch
 	 - CyclicBarrier
-cover_picture: /images/JavaThread.png
+cover_picture: /images/JavaThread.jpg
 ---
 
 ### Synchronized 

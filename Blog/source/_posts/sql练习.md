@@ -60,11 +60,11 @@
 
 10. 查询Score表中的最高分的学生学号和课程号。
 
-  ```sql
-  SELECT sno,cno From scores ORDER BY degree DESC LIMIT 1
-  
-  SELECT MAX(degree) From scores //查询最大值
-  ```
+    ```sql
+      SELECT sno,cno From scores ORDER BY degree DESC LIMIT 1
+      
+      SELECT MAX(degree) From scores //查询最大值
+    ```
 
 11. 查询‘3-105’号课程的平均分。
 
@@ -334,15 +334,47 @@
 
 1. 查询" 01 "课程比" 02 "课程成绩高的学生的信息及课程分数。
 
+   ```sql
+   SELECT st.*,sc1.* FROM sc sc1  JOIN sc sc2 On (sc1.sId = sc2.sid) JOIN student st On sc1.SId = st.SId WHERE sc1.CId = '01' And  sc2.cid = '02' And sc1.score > sc2.score;
+   
+   select * from Student RIGHT JOIN (select t1.SId, class1, class2 from (select SId, score as class1 from sc where sc.CId = '01')as t1, (select SId, score as class2 from sc where sc.CId = '02')as t2 where t1.SId = t2.SId AND t1.class1 > t2.class2
+   )r on Student.SId = r.SId;
+   ```
+
 2. 查询同时存在" 01 "课程和" 02 "课程的情况。
+
+   ```sql
+   SELECT sc1.sid FROM sc sc1 JOIN sc sc2 On sc1.sid = sc2.sid WHERE sc1.cid ='01' And sc2.CId = '02';
+   
+   select * from  (select * from sc where sc.CId = '01') as t1, (select * from sc where sc.CId = '02') as t2 where t1.SId = t2.SId;
+   ```
 
 3. 查询存在" 01 "课程但可能不存在" 02 "课程的情况(不存在时显示为 null )。
 
+   ```sql
+   SELECT sc1.sid,sc1.cid,sc2.cid FROM sc sc1 Left JOIN sc sc2 On (sc1.sid = sc2.sid And sc2.cid = '02') WHERE sc1.cid = '01';
+   
+   select * from  (select * from sc where sc.CId = '01') as t1 left join (select * from sc where sc.CId = '02') as t2 on t1.SId = t2.SId;
+   ```
+
 4. 查询不存在" 01 "课程但存在" 02 "课程的情况。
+
+   ```sql
+   select * from sc where sc.SId not in (select SId from sc where sc.CId = '01') AND sc.CId= '02';
+   ```
 
 5. 查询平均成绩大于等于 60 分的同学的学生编号和学生姓名和平均成绩。
 
+   ```sql
+   SELECT st.*,sum(sc.score),avg(sc.score) as avgsum From sc JOIN student st On sc.SId = st.sid GROUP BY st.SId HAVING(avgsum >= 60);
+   
+   select student.SId,sname,ss from student,(select SId, AVG(score) as ss from sc GROUP BY SId HAVING AVG(score)>= 60) r
+   where student.sid = r.sid;
+   ```
+
 6. 查询在 SC 表存在成绩的学生信息。
+
+   
 
 7. 查询所有同学的学生编号、学生姓名、选课总数、所有课程的总成绩(没成绩的显示为 null )。
 
@@ -376,7 +408,7 @@
 
 19. 按各科成绩进行排序，并显示排名， Score 重复时保留名次空缺。
 
-20.  按各科成绩进行排序，并显示排名， Score 重复时合并名次。
+20. 按各科成绩进行排序，并显示排名， Score 重复时合并名次。
 
 21. 查询学生的总成绩，并进行排名，总分重复时保留名次空缺。
 
@@ -441,14 +473,6 @@
  
 
  
-
- 
-
- 
-
- 
-
-
 
 ###### Count
 
