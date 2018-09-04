@@ -415,11 +415,11 @@
 
 10. 查询学过「张三」老师授课的同学的信息。
 
-   ```sql
-   SELECT st.* From student st JOIN sc On sc.SId = st.SId JOIN course On course.CId = sc.CId JOIN teacher On teacher.TId = course.TId WHERE teacher.Tname = '张三'; 
-   
-   select student.* from student,teacher,course,sc where student.sid = sc.sid and course.cid=sc.cid and course.tid = teacher.tid and tname = '张三';
-   ```
+    ```sql
+    SELECT st.* From student st JOIN sc On sc.SId = st.SId JOIN course On course.CId = sc.CId JOIN teacher On teacher.TId = course.TId WHERE teacher.Tname = '张三'; 
+       
+    select student.* from student,teacher,course,sc where student.sid = sc.sid and course.cid=sc.cid and course.tid = teacher.tid and tname = '张三';
+    ```
 
 11. 查询没有学全所有课程的同学的信息。
 
