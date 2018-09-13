@@ -208,3 +208,39 @@ ReentrantLock
         }
     
     ```
+
+### ReadWriteLock
+
+- 数据读写，保证数据的一致性和完整性。
+- 读和写是互斥的。
+- 写和写是互斥的。
+- 读和读不是互斥的。
+
+```java
+public class Data {
+    private Long value;
+    private ReadWriteLock mReadWriteLock = new ReentrantReadWriteLock();
+
+    public Long getValue() {
+        Lock readLock = mReadWriteLock.readLock();
+        try {
+            readLock.lock();
+            return value;
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+    public void setValue(Long value) {
+        Lock writeLock = mReadWriteLock.writeLock();
+        try {
+            writeLock.lock();
+            this.value = value;
+        } finally {
+            writeLock.unlock();
+        }
+
+    }
+}
+```
+
