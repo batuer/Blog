@@ -85,3 +85,14 @@ cover_picture: /images/AndroidInterivew.jpg
 4. 列表View数据错乱
 
 5. 多层级控件View
+
+##### 2018-09-19  西安纽扣软件
+
+1. Binder进程通信。
+2. Android事件分发。
+3. Android View绘制流程。
+4. Java封装类
+   - 因为泛型类包括预定义的集合，使用的参数都是对象类型，无法直接使用基本类型的数据，所以提供了基本类型的封装类。
+5. Android中为什么主线程不会因为Looper.loop()里的死循环阻塞？
+   - 主线程因为Looper.loop()死循环，每个消息事件时间限制（ANR）。
+   - Android基于事件驱动。
