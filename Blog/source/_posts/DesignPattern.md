@@ -22,7 +22,7 @@
 
 ###### UML
 
-![](https://upload-images.jianshu.io/upload_images/2088926-aa1a0fbbd376a078.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/2088926-0265e6be332b6305.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ###### 代码
 
@@ -81,7 +81,7 @@ public class AStragety implements IStragety {
 
 ###### UML
 
-![](https://upload-images.jianshu.io/upload_images/2088926-750ea9795e10abc5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/2088926-508f9cd9d5c47eb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ###### 代码
 
@@ -194,11 +194,9 @@ public class LoginContext {
 
 ###### UML
 
-![](https://upload-images.jianshu.io/upload_images/2088926-1edb211471ed96ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/2088926-f0904b58ed87d8dd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ###### 代码
-
-
 
 ```Java
 public abstract class AbsComputer {
@@ -277,6 +275,8 @@ public class MilitaryComputer extends AbsComputer {
 
 ###### UML
 
+![](https://upload-images.jianshu.io/upload_images/2088926-f61be7c9c87a720c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ###### 代码
 
 ```java
@@ -352,6 +352,8 @@ public enum Singleton3 {
 
 ###### UML
 
+![](https://upload-images.jianshu.io/upload_images/2088926-a5adf8172956079b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ###### 代码
 
 ```java
@@ -417,6 +419,8 @@ public class Computer {
 
 ###### UML
 
+![](https://upload-images.jianshu.io/upload_images/2088926-584799dd2d9e0c85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ###### 代码
 
 ```java
@@ -477,6 +481,8 @@ public class Address {
 
 ###### UML
 
+![](https://upload-images.jianshu.io/upload_images/2088926-cbe18d7b56a2df3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ###### 代码
 
 ```java
@@ -531,7 +537,69 @@ public class DBHandler extends IOHandler {
 }
 ```
 
+######  抽象工厂模式
 
+###### 定义
+
+- 创建一组相关或是相互依赖的对象提供一个接口，不需要指定具体的类。（产品是抽象的）
+
+###### 场景
+
+- 不同抽象产品在不同环境下同一表现行为。
+
+###### 优点
+
+- 分离接口与实现。
+- 客户端不关系具体产品的实现（面向接口）。
+
+###### 缺点
+
+- 类文件增加。
+- 难以扩展新产品。
+
+###### UML
+
+![](https://upload-images.jianshu.io/upload_images/2088926-261503ef95c23c14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+###### 代码
+
+```java
+/**
+ * 抽象工厂
+ */
+public abstract class CarFactory {
+    public abstract ITire createTire();
+}
+
+/**
+ * 具体工厂
+ */
+public class Q3Car extends CarFactory {
+    @Override
+    public ITire createTire() {
+        return new NormalTire();
+    }
+}
+
+/**
+ * 抽象产品
+ */
+public interface ITire {
+  void tire();
+}  
+
+/**
+ * 具体产品
+ */
+public class NormalTire implements ITire {
+    @Override
+    public void tire() {
+        System.out.println("normal createTire");
+    }
+}
+```
+
+######  责任链模式
 
 ###### 定义
 
