@@ -537,7 +537,7 @@ public class DBHandler extends IOHandler {
 }
 ```
 
-######  抽象工厂模式
+##### 抽象工厂模式
 
 ###### 定义
 
@@ -599,7 +599,112 @@ public class NormalTire implements ITire {
 }
 ```
 
-######  责任链模式
+##### 责任链模式
+
+###### 定义
+
+- 多个对象都有机会处理请求（避免请求接收者和发送者之间的耦合关系），将这些对象连城一条链，并沿着这条链传递请求，直到有对象处理该请求。
+
+###### 场景
+
+- **多个**对象处理同一请求，具体哪个对象处理则在运行时**动态**决定。
+
+###### 优点
+
+- 请求者和处理者解耦，提高代码灵活性。
+
+###### 缺点
+
+- 处理者太多，遍历影响性能。
+
+###### UML
+
+###### 代码
+
+```java
+/**
+ * 抽象处理者
+ */
+public abstract class AbsHandler {
+    protected AbsHandler nextHandler;
+
+    protected abstract void handle(AbsReq req);
+
+    protected abstract int getHandleLevel();
+
+    public final void handleReq(AbsReq req) {
+        if (getHandleLevel() == req.getLevel()) {
+            handle(req);
+        } else {
+            if (nextHandler != null) {
+                nextHandler.handleReq(req);
+            } else {
+                System.out.println("no next handler");
+            }
+        }
+    }
+}
+/**
+ * 具体处理者
+ */
+public class Handler1 extends AbsHandler {
+
+    @Override
+    protected void handle(AbsReq req) {
+        System.out.println("handler1 ");
+    }
+
+    @Override
+    protected int getHandleLevel() {
+        return 1;
+    }
+}
+/**
+ * 抽象请求
+ */
+public abstract class AbsReq {
+    protected Object obj;//处理请求
+
+    protected abstract int getLevel();
+
+    public AbsReq(Object obj) {
+        this.obj = obj;
+    }
+
+    public Object getObj() {
+        return obj;
+    }
+}
+/**
+ * 具体请求
+ */
+public class Req extends AbsReq {
+    public Req(Object obj) {
+        super(obj);
+    }
+
+    @Override
+    protected int getLevel() {
+        return 1;
+    }
+}
+```
+
+##### 解释器模式
+
+###### 定义
+
+###### 场景
+
+###### 优点
+
+###### 缺点
+
+###### UML
+
+###### 代码
+
+##### 责任链模式
 
 ###### 定义
 
