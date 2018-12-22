@@ -86,13 +86,27 @@ cover_picture: /images/AndroidInterivew.jpg
 
 5. 多层级控件View
 
-##### 2018-09-19  西安纽扣软件
+##### 2018-09-19  西安纽扣软件Binder进程通信。
 
-1. Binder进程通信。
-2. Android事件分发。
-3. Android View绘制流程。
-4. Java封装类
+1. Android事件分发。
+
+2. Android View绘制流程。
+
+3. Java封装类
    - 因为泛型类包括预定义的集合，使用的参数都是对象类型，无法直接使用基本类型的数据，所以提供了基本类型的封装类。
-5. Android中为什么主线程不会因为Looper.loop()里的死循环阻塞？
+
+4. Android中为什么主线程不会因为Looper.loop()里的死循环阻塞？
    - 主线程因为Looper.loop()死循环，每个消息事件时间限制（ANR）。
    - Android基于事件驱动。
+
+5. [HashMap](https://blog.csdn.net/VampireKalus/article/details/79798372) 
+
+   1. 工作原理
+      - HashMap是基于hashing的原理。
+      - 使用put(key,value)储存对象Map.Entry到HashMap中。
+         1. 先对键调用hashCode()方法，返回的hashCode用于找到bucket位置来储存Map.Entry对象。
+         2. HashMap是在bucket中储存键对象和值对象，作为Map.Entry。
+      - 使用get(key)从HashMap中获取对象。
+         1. 根据key的hashCode获取index。
+         2. 遍历链表key.equals()找对应Map.Entry对象。
+   2. [JDK1.8源码分析](https://blog.csdn.net/brycegao321/article/details/52527236) 
