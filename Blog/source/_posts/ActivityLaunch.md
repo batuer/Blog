@@ -334,4 +334,4 @@ ActivityThread实例调用attach(false)，创建Application
       ```
 
 
-#### Application 创建完成，第一个Activity创建完成。
+#### Application 创建完成，第一个Activity创建完成。  
