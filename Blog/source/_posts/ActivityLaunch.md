@@ -11,6 +11,29 @@ cover_picture: /images/common.png
 
 ![Activity启动流程](https://upload-images.jianshu.io/upload_images/1869462-882b8e0470adf85a.jpg)
 
+### ActivityThread
+
+![](https://upload-images.jianshu.io/upload_images/2088926-2f7a42daaf8f9b1f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+1. main()：ActivityThread是一个应用的主线程，入口方法是main()。
+   1. 应用进程绑定：main()方法通过thread.attach(false)绑定应用进程。
+   2. 主线程消息处理。
+2. 内部类ApplicationThread： ApplicationThread不是一个Thread而是一个Binder,主要用于应用进程和ActivityManagerService进程间通信的。  
+3. 内部类H：继承自Handler的,它是个私有的内部类,其实就是主线程的Handler,通过这个Handler就可以往主线程的消息队列发消息,如:启动Activity、service,接收广播等。 
+4. 内部类ActivityClientRecord：一个进程对应一个ActivityThread,成员变量mActivities包含了当前进程的所有的activity。activity封装成ActivityClientRecord。 
+5. 总结
+   1. ActivityThread#main
+   2. ActivityThread#attach
+   3. ActivityManagerProxy#attachApplication 
+   4. ActivityManagerService#attachApplication 
+   5. ActivityManagerService#attachApplicationLocked 
+   6. ActivityStack#realStartActivityLocked 
+   7. ApplicationThreadProxy#scheduleLaunchActivity 
+   8. ApplicationThread#scheduleLaunchActivity 
+   9. ActivityThread#queueOrSendMessage 
+   10. H#handleMessage 
+   11. ActivityThread#handleCreateService 
+
 ### 一切从main()开始
 
 Android中，一个应用程序的开始从ActivityThread.java中的main()开始。

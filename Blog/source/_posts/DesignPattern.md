@@ -1,3 +1,11 @@
+title:  设计模式
+date: 2018年12月23日17:54:10
+categories: 设计模式
+tags: 
+	 - 设计模式
+cover_picture: /images/common.png
+---
+
 ##### 策略模式
 
 ###### 定义
