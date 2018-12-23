@@ -9,7 +9,7 @@ cover_picture: /images/GitCommand.png
 
 ### Githug 安装及命令
 
-1. []: https://github.com/Gazler/githug
+1. [Githug]: https://github.com/Gazler/githug
 
 2. 安装Ruby 1.8.7 or higher
 
@@ -50,28 +50,29 @@ cover_picture: /images/GitCommand.png
 15. 丢弃工作区的修改：git checkout -- file
 16. 查看本地Log：git log
 17. 查看远程Log：git log origin/master
-18. Log信息一行：
+18. 指定默认分支：git branch --set-upstream-to=origin/<branch> develop 或者git push --set-upstream origin develop
+19. Log信息一行：
     - git log --pretty=oneline
     - git log --oneline
-19. cherry-pick
+20. cherry-pick
     - 单个：git cherry-pick commit-id
     - 多个：git cherry-pick commit-id**..**commit-id
-20. 合并
+21. 合并
     1. git merge xxx  :将xxx分支合并到当前分支:
     2. Rebase 实际上就是取出一系列的提交记录，“复制”它们，然后在另外一个地方逐个的放下去。 
        1. git rebase xxx :将xxx分支合并到当前分支。
        2. git rebase -i xxx1   xxx2: 合并xxx1到xxx2。
-21. 回退：
+22. 回退：
     1. git checkout HEAD^：回退前一个
     2. git checkout HEAD~n：回退n个 提交
-22. 撤销
+23. 撤销
     1. git reset ：本地撤销。
     2. git revert：提交一个新的版本，将需要revert的版本的内容再反向修改回去 
     3. git revert 和 git reset的区别 
        1. git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。
        2. 在回滚这一操作上看，效果差不多。但是在日后继续merge以前的老版本时有区别。因为git revert是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是git reset是之间把某些commit在某个branch上删除，因而和老的branch再次merge时，这些被回滚的commit应该还会被引入。 
        3. git reset 是把HEAD向后移动了一下，而git revert是HEAD继续前进，只是新的commit的内容和要revert的内容正好相反，能够抵消要被revert的内容。 
-23. Log
+24. Log
     1. git log：HEAD及以前
     2. git reflog：所有Log
 
