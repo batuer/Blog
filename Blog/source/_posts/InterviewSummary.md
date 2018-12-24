@@ -110,3 +110,13 @@ cover_picture: /images/AndroidInterivew.jpg
          1. 根据key的hashCode获取index。
          2. 遍历链表key.equals()找对应Map.Entry对象。
    2. [JDK1.8源码分析](https://blog.csdn.net/brycegao321/article/details/52527236) 
+
+   ##### 2018-12-24  西安种子科技
+
+   1. Fragment生命周期
+
+      ![](https://upload-images.jianshu.io/upload_images/2088926-c4e0c600af1b92e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+   2. Fragment懒加载
+
+      - setUserVisibleHint(boolean isVisibleToUser)判断当前Fragment是否可见。
