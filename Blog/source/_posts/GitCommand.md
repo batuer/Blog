@@ -67,7 +67,19 @@ cover_picture: /images/GitCommand.png
     2. git checkout HEAD~n：回退n个 提交
 23. 撤销
     1. git reset ：本地撤销。
+
+       |  选型   | HEAD | Index | Working copy |
+       | :-----: | :--: | :---: | :----------: |
+       | --soft  |  是  |  否   |      否      |
+       | --mixed |  是  |  是   |      否      |
+       | --hard  |  是  |  是   |      是      |
+
+       - Head：当前分支的最近一个提交。
+       - Index：暂存区。
+       - WorKing Copy：工作文件集。
+
     2. git revert：提交一个新的版本，将需要revert的版本的内容再反向修改回去 
+
     3. git revert 和 git reset的区别 
        1. git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。
        2. 在回滚这一操作上看，效果差不多。但是在日后继续merge以前的老版本时有区别。因为git revert是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是git reset是之间把某些commit在某个branch上删除，因而和老的branch再次merge时，这些被回滚的commit应该还会被引入。 
