@@ -2,8 +2,8 @@ title:  Activity启动流程
 date: 2018年3月27日08:02:11
 categories: Activity
 tags: 
-	 - Android
-	 - Activity
+​	 - Android
+​	 - Activity
 cover_picture: /images/common.png
 ---
 
@@ -42,7 +42,7 @@ Android中，一个应用程序的开始从ActivityThread.java中的main()开始
 2. 准备当前线程的Looper为程序的MainLooper。
 3. 初始化ActivityThread实例
 4. ActivityThread实例调用attach(false)，创建Application
-5. 获取MainThreadHandler
+5. 获取MainThreadHandler。
 6. MainLooper开始loop(),接收发送消息。程序开始运行。
 
 ### 创建Application的消息
