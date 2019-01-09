@@ -44,7 +44,7 @@ cover_picture: /images/GitCommand.png
 9. 查看远程分支：git branch -r
 10. 删除本地分支：git branch -D xxx
 11. 删除远程分支： git push origin delete xxx
-12. 拉取远程分支并在本地创建：git  checkout  -b  xxx  origin  origin/xxx
+12. 拉取远程分支并在本地创建：git  checkout  -b  xxx  origin/xxx
 13. 切换本地分支：git  checkout  xxx 
 14. 移除暂存区：git reset HEAD file
 15. 丢弃工作区的修改：git checkout -- file
