@@ -61,7 +61,7 @@ public class AStragety implements IStragety {
 
 ###### 策略模式与工厂模式的却别
 
-|            策略模式            |          工厂模式          |
+|            工厂模式            |          策略模式          |
 | :----------------------------: | :------------------------: |
 |         创建型设计模式         |       行为型设计模式       |
 |          关注对象创建          |        关注行为选择        |
@@ -180,7 +180,7 @@ public class LoginContext {
   - 策略模式：由客户端提供策略。
   - 模板模式：具体子类自己决定是否变化。
 
-###### 模板模式
+##### 模板方法模式
 
 ###### 定义
 
@@ -611,6 +611,7 @@ public class NormalTire implements ITire {
 
 ###### 定义
 
+- 多个节点（对象）首尾相连为链，每个节点都有自己的处理逻辑。
 - 多个对象都有机会处理请求（避免请求接收者和发送者之间的耦合关系），将这些对象连城一条链，并沿着这条链传递请求，直到有对象处理该请求。
 
 ###### 场景
@@ -698,7 +699,7 @@ public class Req extends AbsReq {
 }
 ```
 
-##### 解释器模式
+##### 解释器模式(涉及编程理论较多)
 
 ###### 定义
 
@@ -711,6 +712,137 @@ public class Req extends AbsReq {
 ###### UML
 
 ###### 代码
+
+##### 命令模式
+
+###### 定义
+
+- 一系列方法调用封装。
+- 将一个请求封装成对象，使用不同的请求把客户端参数化。
+- 解决命令请求者与实现者之间的耦合关系。
+- 更方便对命令扩展。
+- 对多个命令的统一控制。
+
+###### 场景
+
+- 抽象出待执行的动作，然后以参数的形式提供出来。
+
+###### 优点
+
+- OCP原则。
+- 命令记录。
+- 更弱的耦合，更灵活的控制性，更好的扩展性。
+
+###### 缺点
+
+- 类的膨胀，大量衍生类。
+
+###### UML
+
+![](https://upload-images.jianshu.io/upload_images/2088926-7748148a93b5938f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+###### 代码
+
+```java
+public class Client {
+  public static void main(String[] args) {
+    //Receiver
+    TetrisMachine machine = new TetrisMachine();
+    //ConcreteCommand
+    LeftCommand leftCommand = new LeftCommand(machine);
+    RightCommand rightCommand = new RightCommand(machine);
+    FallCommand fallCommand = new FallCommand(machine);
+    TransformCommand transformCommand = new TransformCommand(machine);
+    //Invoker
+    Buttons buttons = new Buttons(leftCommand, rightCommand, fallCommand, transformCommand);
+    //具体操作
+    buttons.toLeft();
+    buttons.toRight();
+  }
+}
+
+/**
+ * Created by 111 on 2017/3/12.
+ * Invoker：发送请求
+ */
+public class Buttons {
+  private LeftCommand mLeftCommand;
+  private RightCommand mRightCommand;
+  private FallCommand mFallCommand;
+  private TransformCommand mTransformCommand;
+
+  public Buttons(LeftCommand leftCommand, RightCommand rightCommand, FallCommand fallCommand,
+      TransformCommand transformCommand) {
+    mLeftCommand = leftCommand;
+    mRightCommand = rightCommand;
+    mFallCommand = fallCommand;
+    mTransformCommand = transformCommand;
+  }
+  public void setLeftCommand(LeftCommand leftCommand) {
+    mLeftCommand = leftCommand;
+  }
+
+  public void setRightCommand(RightCommand rightCommand) {
+    mRightCommand = rightCommand;
+  }
+
+  public void setFallCommand(FallCommand fallCommand) {
+    mFallCommand = fallCommand;
+  }
+
+  public void setTransformCommand(TransformCommand transformCommand) { mTransformCommand = transformCommand; }
+
+  public void toLeft() {
+    mLeftCommand.execute();
+  }
+
+  public void toRight() { mRightCommand.execute(); }
+
+  public void fall() {
+    mFallCommand.execute();
+  }
+
+  public void transform() {
+    mTransformCommand.execute();
+  }
+}
+
+/**
+ * Created by 111 on 2017/3/12.
+ * ConcreteCommand：执行请求
+ */
+public class LeftCommand implements Command {
+  private TetrisMachine mMachine;
+
+  public LeftCommand(TetrisMachine machine) { mMachine = machine; }
+
+  @Override public void execute() { mMachine.toLeft(); }
+}
+
+/**
+ * Created by 111 on 2017/3/12.
+ * Receiver：执行请求下命令的具体逻辑
+ */
+public class TetrisMachine {
+  public void toLeft() {
+    System.out.println("to left");
+  }
+
+  public void toRight() {
+    System.out.println("to right");
+  }
+
+  public void fastToBottom() {
+    System.out.println("fast to bottom");
+  }
+
+  public void transform() {
+    System.out.println("transform");
+  }
+}
+```
+
+
 
 ##### 责任链模式
 
