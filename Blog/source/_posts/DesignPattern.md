@@ -717,11 +717,11 @@ public class Req extends AbsReq {
 
 ###### 定义
 
-- 一系列方法调用封装。
 - 将一个请求封装成对象，使用不同的请求把客户端参数化。
-- 解决命令请求者与实现者之间的耦合关系。
-- 更方便对命令扩展。
-- 对多个命令的统一控制。
+- 请求者与实现者解耦。
+- 一个请求可以多个命令。
+- 多个命令的统一控制。
+- 方便命令扩展。
 
 ###### 场景
 
@@ -739,7 +739,7 @@ public class Req extends AbsReq {
 
 ###### UML
 
-![](https://upload-images.jianshu.io/upload_images/2088926-7748148a93b5938f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/2088926-93b91d998575518b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ###### 代码
 
@@ -839,6 +839,109 @@ public class TetrisMachine {
   public void transform() {
     System.out.println("transform");
   }
+}
+```
+
+##### 观察者模式（订阅——发布系统）
+
+###### 定义
+
+- 对象间一对一对多的依赖关系，当发布者发生变化时，通知依赖与它的订阅者。
+
+###### 场景
+
+- 关联行为场景，可拆分，非**组合**关系。
+- 事件多级触发场景。
+- eg：事件总线处理机制。
+
+###### 优点
+
+- 解耦，保证订阅系统的灵活性、扩展性。
+
+###### 缺点
+
+- 开发效率和运行效率。
+
+###### UML
+
+![](https://upload-images.jianshu.io/upload_images/2088926-a474874bc0adb3f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+###### 代码
+
+```java
+/**
+ * 作者：${ylw} on 2017/3/16 23:05
+ * Subject
+ */
+public interface Subject {
+  void addObserver(Observer observer);
+  void removeObserver(Observer observer);
+}
+
+/**
+ * 作者：${ylw} on 2017/3/16 23:07
+ * ConcreteSubject
+ */
+public class DevTechFrontier implements Subject {
+    private List<Observer> mObservableList = Collections.synchronizedList(new ArrayList<Observer>());
+    @Override
+    public void addObserver(Observer observer) {
+        if (!mObservableList.contains(observer)) {
+            mObservableList.add(observer);
+        }
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        if (mObservableList.contains(observer)) {
+            mObservableList.remove(observer);
+        }
+    }
+
+    /**
+     * 通知所有观察者
+     */
+    private void notifyObservers(String content) {
+        for (Observer observer : mObservableList) {
+            observer.update(content);
+        }
+    }
+
+    /**
+     * 标识状态或者内容发生改变
+     */
+    private void setChanged() {
+    }
+
+    public void postNewpublication(String content) {
+        setChanged();
+        notifyObservers(content);
+    }
+}
+
+/**
+ * 作者：${ylw} on 2017/3/16 23:02
+ * Observer
+ */
+public interface Observer {
+  void update(Object arg);
+}
+
+/**
+ * 作者：${ylw} on 2017/3/16 23:04
+ * ConcreteObserver
+ */
+public class Coder implements Observer {
+    private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void update(Object arg) {
+        System.out.println(name + " update");
+    }
 }
 ```
 
