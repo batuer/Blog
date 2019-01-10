@@ -717,12 +717,11 @@ public class Req extends AbsReq {
 
 ###### 定义
 
+- 一系列方法调用封装。
 - 将一个请求封装成对象，使用不同的请求把客户端参数化。
-- 请求者与实现者解耦。
-- 一个请求可以多个命令。
-- 多个命令的统一控制。
-- 方便命令扩展。
-
+- 解决命令请求者与实现者之间的耦合关系。
+- 更方便对命令扩展。
+- 对多个命令的统一控制。
 ###### 场景
 
 - 抽象出待执行的动作，然后以参数的形式提供出来。
@@ -739,8 +738,7 @@ public class Req extends AbsReq {
 
 ###### UML
 
-![](https://upload-images.jianshu.io/upload_images/2088926-93b91d998575518b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
+![](https://upload-images.jianshu.io/upload_images/2088926-7748148a93b5938f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ###### 代码
 
 ```java
@@ -944,7 +942,6 @@ public class Coder implements Observer {
     }
 }
 ```
-
 
 
 ##### 责任链模式
