@@ -2,7 +2,7 @@ title:  设计模式
 date: 2018年12月23日17:54:10
 categories: 设计模式
 tags: 
-	 - 设计模式
+​	 - 设计模式
 cover_picture: /images/common.png
 ---
 
@@ -59,7 +59,7 @@ public class AStragety implements IStragety {
 }
 ```
 
-###### 策略模式与工厂模式的却别
+###### 策略模式与工厂模式的区别
 
 |            工厂模式            |          策略模式          |
 | :----------------------------: | :------------------------: |
@@ -940,8 +940,139 @@ public class Coder implements Observer {
     public void update(Object arg) {
         System.out.println(name + " update");
     }
-}git 
+}
 ```
+
+
+##### 备忘录模式
+
+###### 定义
+
+- 保存对象当前状态，之后可以再次恢复到此状态。
+- 被保存的对象状态不能被对象从外部访问。
+- 不破坏封闭的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。
+
+###### 场景
+
+- 需要保存一个对象在某一个时刻的状态或部分状态。
+- 通过中间对象访问其内部状态。
+
+###### 优点
+
+- 提供一种可恢复状态的机制，用户方便快速返回某个状态。
+- 实现信息的封装，用户不关心状态的保存。
+
+###### 缺点
+
+- 消耗资源，类成员增多。
+
+###### UML
+
+###### 代码
+
+```java
+/**
+ * @Author ylw  19-2-6 21:37
+ * Originator:创建备忘录、恢复状态
+ */
+public class Games {
+    private int mCheckpoint = 1;
+    private int mLifeValue = 100;
+    private String mWeapon = "沙漠之鹰";
+
+    //打游戏
+    public void play() {
+        System.out.println("玩游戏 : " + String.format("第%d关", mCheckpoint));
+        mLifeValue -= 10;
+        mCheckpoint++;
+        System.out.println("到达 : " + String.format("第%d关", mCheckpoint));
+    }
+
+    //退出游戏
+    public void quit() {
+        System.out.println("退出时的游戏属性:" + toString());
+    }
+
+    //创建备忘录
+    public Memento createMemento() {
+        Memento memento = new Memento();
+        memento.mCheckpoint = this.mCheckpoint;
+        memento.mLifeValue = this.mLifeValue;
+        memento.mWeapon = this.mWeapon;
+        return memento;
+    }
+
+    //恢复备忘录
+    public void restoreMemento(Memento memento) {
+        this.mCheckpoint = memento.mCheckpoint;
+        this.mLifeValue = memento.mLifeValue;
+        this.mWeapon = memento.mWeapon;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Games{" +
+                "mCheckpoint=" + mCheckpoint +
+                ", mLifeValue=" + mLifeValue +
+                ", mWeapon='" + mWeapon + '\'' +
+                '}';
+    }
+}
+
+/**
+ * @Author ylw  19-2-6 22:16
+ * 备忘录角色,保存Originator对象状态
+ */
+public class Memento {
+    public int mCheckpoint;
+    public int mLifeValue;
+    public String mWeapon;
+
+    @Override
+    public String toString() {
+        return "Memento{" +
+                "mCheckpoint=" + mCheckpoint +
+                ", mLifeValue=" + mLifeValue +
+                ", mWeapon='" + mWeapon + '\'' +
+                '}';
+    }
+}
+
+/**
+ * @Author ylw  19-2-6 22:28
+ * 存储备忘录，不支持操作备忘录
+ */
+public class Caretaker {
+    private Memento mMemento;
+
+    //存档
+    public void archive(Memento memento) {
+        this.mMemento = memento;
+    }
+
+    //获取存档
+    public Memento getMemento() {
+        return mMemento;
+    }
+}
+
+/**
+ * @Author ylw  19-2-6 22:32
+ */
+public class Client {
+    public static void main(String[] args) {
+        Games games = new Games();
+        games.play();
+        Caretaker caretaker = new Caretaker();
+        caretaker.archive(games.createMemento());
+        games.quit();
+        //恢复
+        games.restoreMemento(caretaker.getMemento());
+    }
+}
+```
+
 
 
 ##### 责任链模式
