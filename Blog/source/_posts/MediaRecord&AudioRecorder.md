@@ -1,3 +1,11 @@
+title: MediaRecord&AudioRecorder
+date: 2019年03月17日23:32:46
+categories: 未标记
+tags: 
+     - 未标记
+cover_picture: /images/MediaRecord&AudioRecorder.jpeg
+---
+    
 ##### AudioRecord（基于字节流录音）
 
 - 录制最原始的PCM流数据（PCM编码压缩后可为AMR、MP3、AAC），需要用AudioTrack播放。

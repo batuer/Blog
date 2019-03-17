@@ -1,3 +1,11 @@
+title: Android.mk
+date: 2019年03月17日23:32:43
+categories: 未标记
+tags: 
+     - 未标记
+cover_picture: /images/Android.mk.jpeg
+---
+    
 ##### Android.mk简介
 
 - 允许将Source打包成一个"modules"
