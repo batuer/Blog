@@ -1,11 +1,11 @@
-title:  Java内部类
-date: 2018年12月16日21:56:21
-categories: Java基础
+title: JavaInnerClass
+date: 2019年05月12日08:33:37
+categories: 未标记
 tags: 
-​	 - Java
-cover_picture: /images/common.png
+     - 未标记
+cover_picture: /images/JavaInnerClass.jpeg
 ---
-
+    
 #### 内部类
 
 - 类的内部定义一个类。

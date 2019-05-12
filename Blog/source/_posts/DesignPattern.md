@@ -1,11 +1,11 @@
-title:  设计模式
-date: 2018年12月23日17:54:10
-categories: 设计模式
+title: DesignPattern
+date: 2019年05月12日08:38:34
+categories: 未标记
 tags: 
-​	 - 设计模式
-cover_picture: /images/common.png
+     - 未标记
+cover_picture: /images/DesignPattern.jpeg
 ---
-
+    
 ##### 策略模式
 
 ###### 定义

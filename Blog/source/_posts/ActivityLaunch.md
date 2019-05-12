@@ -1,12 +1,11 @@
-title:  Activity启动流程
-date: 2018年3月27日08:02:11
-categories: Activity
+title: ActivityLaunch
+date: 2019年05月12日08:32:09
+categories: 未标记
 tags: 
-​	 - Android
-​	 - Activity
-cover_picture: /images/common.png
+     - 未标记
+cover_picture: /images/ActivityLaunch.jpeg
 ---
-
+    
 > https://www.jianshu.com/p/9ecea420eb52
 
 ![Activity启动流程](https://upload-images.jianshu.io/upload_images/1869462-882b8e0470adf85a.jpg)
