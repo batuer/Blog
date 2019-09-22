@@ -135,30 +135,50 @@ cover_picture: /images/网络传输层.png
 
    ###### 概念
 
+   - 操作系统对于传输层（TCP/UDP）抽象的接口。
    - 通信的基石，是支持TCP/IP协议网络通信的基本操作单元。
    - 包含通信必须的物种必须信息：
      1. 连接使用的协议。
      2. 本地主机的IP。
      3. 本地进程的协议端口。
      4. 远地主机的IP。
-     5. 远地进程的协议端口。
-
-   ###### 建立连接
-
-   - 至少需要一对套接字，运行与客户端的ClientSocket和运行与服务端的ServerSocker。
+  5. 远地进程的协议端口。
+   
+###### 建立连接
+   
+   - 至少需要一对套接字，运行与客户端的ClientSocket和运行与服务端的ServerSocket。
    - 连接步骤
      1. 服务器监听。
      2. 客户端请求。
-     3. 连接确认。
-
-   ###### SOCKET、TCP/IP、HTTP
-
+  3. 连接确认。
+   
+###### SOCKET、TCP/IP、HTTP
+   
    - 建立Socket连接时，可指定使用的传输层协议（TCP或UDP）。
    - TCP/IP是传输层协议，解决数据如何在网络中传输。
-   - HTTP层是应用层协议，解决如何包装数据。
-
+- HTTP层是应用层协议，解决如何包装数据。
    
-
+**WebSocket**
    
-
+- 协议层
+   - 全双工通信
+   - 基于TCP
+   - HTTP的url使用"http//"或"https//"开头，Websocket的url使用'ws//'开头。
+   - 请求头数据小。
+   
+   **Socket.io**
+   
+   - 封装Websocket。
+   - 实时、双向、基于事件的通讯机制。
+   
+   **Netty**
+   
+   - 并发高
+     1. NIO（Nonblocking I/O）![](https://upload-images.jianshu.io/upload_images/1089449-9eebe781fba495fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/572/format/webp)
+     2. BIO（Blocking I/O）![](https://upload-images.jianshu.io/upload_images/1089449-546a563c9822ce16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/548/format/webp)
+   - 传输快，零拷贝，不经Socket缓冲区。
+   - 封装好
+   
+   
+   
    
