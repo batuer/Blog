@@ -151,3 +151,50 @@ Linux上的其他进程通信方式(管道、消息队列、共享内存、信�
   - 实现面向对象的调用方式(即在使用BInder时，就和调用一个本地对象实例一样)
 
 [^1]: 通过文件共享、Socket、Messenger（AIDL一种）、ContentProvider、AIDL。
+
+
+
+##### Review
+
+###### 一次拷贝
+
+1. Client先从自己的进程空间把通信的数据拷贝到内核空间
+2. Server和内核共享数据，所以不需要重新拷贝数据，直接通过内存地址的偏移量直接获取到数据地址。
+- Server和内核空间之所以能够共享一块空间数据主要是通过binder_mmap来是实现的。
+- 是在内核的虚拟地址空间申请一块喝用户虚拟内存相同大小的内存，然后再申请一个page大小的内存，将它映射到内核虚拟地址空间和用户虚拟内存空间，从而实现了用户空间缓冲和内核空间缓冲同步的功能。
+
+###### 每个进程最多存在多少个Binder线程，这些线程都被占满后会导致什么问题？
+
+​	Binder线程池中的线程数量是在Binder驱动初始化时被定义的，进程池中的线程个数上线为15个，加上主Binder线程，一共最大能存在16个binder线程。
+
+​	当Binder线程都在执行工作时，也就是当出现线程饥饿的时候，从别的进程调用的binder请求如果是同步的话，会在TODO队列中阻塞等待，直到线程池中有空闲的binder线程来处理请求。
+
+###### 使用Binder传输数据的最大限制是多少，被占满后会导致什么问题？
+
+​	在调用mmap时会指定Binder内存缓冲区的大小为1016K，当服务端的内存缓冲区被Binder进程占用满后，Binder驱动不会再处理binder调用并在c++层跑出DeadObjectException到客户端。
+
+同步空间是1016K，异步空间只有一半508K。
+
+###### Binder驱动什么时候释放缓冲区的内存
+
+​	在binder call完成之后，调用Parce.recycle完成释放内存的。
+
+- (128*1024)：对Service Manager的限制。
+
+- ((1*1024*1024) - (4096 *2))：对普通Android services的限制。
+
+- 4M：kernel可以接受的最大空间。
+
+- 所以，实际应用可以申请的最大Binder Buffer是4M。但考虑实际传输的需要和节省内存，Android中申请的是(1M - 8K)。这个值是可以增加的，只要不大于4M就可以。
+
+  > Modify the binder to request 1M - 2 pages instead of 1M. The backing store in the kernel requires a guard page, so 1M allocations fragment memory very badly. Subtracting a couple of pages so that they fit in a power of two allows the kernel to make more efficient use of its virtual address space.
+
+  这段解释还没有充分理解，其大致的意思是：kernel的“backing store”需要一个保护页，这使得1M用来分配碎片内存时变得很差，所以这里减去两页来提高效率，因为减去一页就变成了奇数。至于保护页如何影响内存分配，需要后续分析内存管理时再进一步研究。
+
+  ###### 同步和异步
+
+  Binder通信可以分为同步传输和异步传输，在设置传输空间大小时，将异步传输空间设置为同步传输的一半。
+  proc->free_async_space = proc->buffer_size / 2;
+  Binder通过红黑树进行buffer管理，将分配使用的buffer放入 allocated_buffers，将回收的buffer放入free_buffers。无论同步还是异步，这里的操作都是相同的。
+
+  而free_async_space只是用来统计异步传输时已经分配了多少空间。初始化时将其设置为全部buffer空间的一半，更多的是想对异步传输做一个限制，不希望异步传输消耗掉所有的buffer。相比较而言，同步传输可能会承载更重要的数据，应该尽量保证同步传输有可用buffer。并且异步传输是不需要等待返回的，连续的异步传输很可能将buffer耗光。
