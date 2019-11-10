@@ -244,3 +244,135 @@ public class Data {
 }
 ```
 
+#### sleep
+
+- sleep使当前线程进入停滞状态（阻塞当前线程），**让出CPU**的使用，不让当前线程独自霸占该进程所获取的CPU资源，以留一定时间给其它线程执行的机会。
+
+- 任何地方使用。
+
+-  sleep睡眠时**仍然占有锁**。
+
+  ```java
+   private final Object mLock = new Object();
+  
+      public void sleepTest() {
+          sleep1();
+          try {
+              Thread.sleep(10);
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+          sleep2();
+      }
+  
+      private void sleep1() {
+          new Thread(new Runnable() {
+              @Override
+              public void run() {
+                  System.out.println("sleep1 start");
+                  synchronized (mLock) {
+                      System.out.println("sleep1 synchronized start");
+                      try {
+                          Thread.sleep(5000);
+                      } catch (InterruptedException e) {
+                          System.out.println("sleep1:" + e.toString());
+                      }
+                      System.out.println("sleep1 synchronized end");
+                  }
+                  System.out.println("sleep1 end");
+              }
+          }).start();
+      }
+  
+      private void sleep2() {
+          new Thread(new Runnable() {
+              @Override
+              public void run() {
+                  System.out.println("sleep2 start");
+                  synchronized (mLock) {
+                      System.out.println("sleep2 synchronized start");
+                      System.out.println("sleep2 synchronized end");
+                  }
+                  System.out.println("sleep2 end");
+              }
+          }).start();
+      }
+  
+  sleep1 start
+  sleep1 synchronized start
+  sleep2 start
+  sleep1 synchronized end
+  sleep1 end
+  sleep2 synchronized start
+  sleep2 synchronized end
+  sleep2 end
+  ```
+
+  #### wait
+
+  - wait是Object类里的方法，当一个线程执行到wait()时，就进入到一个和该对象相关的等待池中，同时**释放了锁**(暂时失去锁，wait(long timeout)超时到期后还需要返还对象锁)；其他线程可以访问。
+
+  - wait必须放在synchronized block中，否则会在program runtime 时抛出"java.lang.IllegalMonitorStateException"。
+
+    ```java
+     public void waitTest() {
+            wait1();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            wait2();
+        }
+    
+        private void wait1() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("wait1 start");
+                    synchronized (mLock) {
+                        System.out.println("wait1 synchronized start");
+                        try {
+                            mLock.wait();
+                        } catch (InterruptedException e) {
+                            System.out.println("wait1 :" + e.toString());
+                        }
+                        System.out.println("wait1 synchronized end");
+                    }
+                    System.out.println("wait1 end");
+                }
+            }).start();
+        }
+    
+        private void wait2() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("wait2 start");
+                    synchronized (mLock) {
+                        System.out.println("wait2 synchronized start");
+                        mLock.notify();
+                        // mLock.notifyAll();
+                        System.out.println("wait2 synchronized end");
+                    }
+                    System.out.println("wait2 end");
+                }
+            }).start();
+        }
+    
+    wait1 start
+    wait1 synchronized start
+    wait2 start
+    wait2 synchronized start
+    wait2 synchronized end
+    wait2 end
+    wait1 synchronized end
+    wait1 end
+    ```
+
+    #### notify、notifyAll
+
+    - wait：线程自动释放其占用的对象锁，并等待notify
+    - notify：唤醒一个正在wait当前对象锁的线程，并让它拿到对象锁（多个等待时，具体唤醒哪一个由虚拟机控制）。
+    - notifyAll：唤醒所有正在wait当前对象锁的线程，跳出wait状态，竞争对象锁。
+    - wait、notify、notifyAll是Object类的本地方法，在调用这三个方法的时候，**当前线程必须获得这个对象的锁**。
